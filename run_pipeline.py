@@ -4,7 +4,6 @@ Main script to run entire pipeline (from fine-tuning, compression to evaluation)
 
 import argparse
 import torch
-from peft import PeftModel
 from transformers import AutoModelForCausalLM
 from transformers import LlamaTokenizer
 

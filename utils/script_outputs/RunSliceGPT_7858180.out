@@ -1,0 +1,47 @@
+============================================================================================== 
+Warning! Mixing Conda and module environments may lead to corruption of the
+user environment. 
+We do not recommend users mixing those two environments unless absolutely
+necessary. Note that 
+SURF does not provide any support for Conda environment.
+For more information, please refer to our software policy page:
+https://servicedesk.surf.nl/wiki/display/WIKI/Software+policy+Snellius#SoftwarepolicySnellius-UseofAnacondaandMinicondaenvironmentsonSnellius 
+
+Remember that many packages have already been installed on the system and can
+be loaded using 
+the 'module load <package__name>' command. If you are uncertain if a package is
+already available 
+on the system, please use 'module avail' or 'module spider' to search for it.
+============================================================================================== 
++++Directory: /home/scur1769/ALMA-Matters/compression/pruning/TransformerCompression/experiments
+Running SliceGPT experiment.
+PyTorch device: cuda:0
+Number of available cuda devices: 0
+wandb: WARNING Disabling the wandb service is deprecated as of version 0.18.0 and will be removed in future versions. 
+Loading haoranxu/ALMA-7B config and model weights from Hugging Face
+Traceback (most recent call last):
+  File "/gpfs/home4/scur1769/ALMA-Matters/compression/pruning/TransformerCompression/experiments/run_slicegpt.py", line 274, in <module>
+    slicing_main(slicing_args)
+  File "/gpfs/home4/scur1769/ALMA-Matters/compression/pruning/TransformerCompression/experiments/run_slicegpt.py", line 149, in slicing_main
+    model_adapter, tokenizer = hf_utils.get_model_and_tokenizer(
+  File "/gpfs/home4/scur1769/ALMA-Matters/compression/pruning/TransformerCompression/src/slicegpt/hf_utils.py", line 33, in wrapper
+    result = func(*args, **kwargs)
+  File "/gpfs/home4/scur1769/ALMA-Matters/compression/pruning/TransformerCompression/src/slicegpt/hf_utils.py", line 91, in get_model_and_tokenizer
+    model_adapter = ModelAdapter.from_model(
+  File "/gpfs/home4/scur1769/ALMA-Matters/compression/pruning/TransformerCompression/src/slicegpt/model_adapter.py", line 361, in from_model
+    raise NotImplementedError(f"{model_path} is neither a Hugging Face model nor a supported local model.")
+NotImplementedError: haoranxu/ALMA-7B is neither a Hugging Face model nor a supported local model.
+
+JOB STATISTICS
+==============
+Job ID: 7858180
+Cluster: snellius
+User/Group: scur1769/scur1769
+State: FAILED (exit code 1)
+Nodes: 1
+Cores per node: 18
+CPU Utilized: 00:00:05
+CPU Efficiency: 1.16% of 00:07:12 core-walltime
+Job Wall-clock time: 00:00:24
+Memory Utilized: 1.61 MB
+Memory Efficiency: 0.00% of 120.00 GB
