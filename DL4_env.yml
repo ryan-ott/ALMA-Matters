@@ -1,8 +1,8 @@
 name: DL4_env
 dependencies:
   - python=3.10
-  - pytorch
-  - cudatoolkit=11.8
+  - pytorch=1.13.0
+  - cudatoolkit=11.7
   - pip
   - pip:
     - accelerate

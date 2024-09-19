@@ -14,12 +14,14 @@ module load Anaconda3/2022.05
 
 source activate DL4_env
 
+python -uc "import torch; print('GPU available?', torch.cuda.is_available())"
+
 cd $HOME/ALMA-Matters/compression/pruning/TransformerCompression/experiments
 
 echo "+++Directory: $(pwd)"
 
 python run_slicegpt.py \
-        --model "haoranxu/ALMA-7B" \
+        --model "meta-llama/Llama-2-7b-hf" \
         --save-dir $HOME/ALMA-Matters/models/ \
         --sparsity 0.25 \
         --device "cuda:0" \
