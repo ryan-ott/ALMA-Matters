@@ -1,31 +1,0 @@
-============================================================================================== 
-Warning! Mixing Conda and module environments may lead to corruption of the
-user environment. 
-We do not recommend users mixing those two environments unless absolutely
-necessary. Note that 
-SURF does not provide any support for Conda environment.
-For more information, please refer to our software policy page:
-https://servicedesk.surf.nl/wiki/display/WIKI/Software+policy+Snellius#SoftwarepolicySnellius-UseofAnacondaandMinicondaenvironmentsonSnellius 
-
-Remember that many packages have already been installed on the system and can
-be loaded using 
-the 'module load <package__name>' command. If you are uncertain if a package is
-already available 
-on the system, please use 'module avail' or 'module spider' to search for it.
-============================================================================================== 
-Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Loading checkpoint shards:  33%|███▎      | 1/3 [00:01<00:03,  1.83s/it]Loading checkpoint shards:  67%|██████▋   | 2/3 [00:03<00:01,  1.83s/it]Loading checkpoint shards: 100%|██████████| 3/3 [00:04<00:00,  1.58s/it]Loading checkpoint shards: 100%|██████████| 3/3 [00:04<00:00,  1.65s/it]
-['Translate this from German to English:\\German: Ich esse gerne Fischbrötchen wenn das Wetter schön ist.\nEnglish:I like to eat fish sandwiches when the weather is nice.']
-
-JOB STATISTICS
-==============
-Job ID: 7855324
-Cluster: snellius
-User/Group: scur1769/scur1769
-State: COMPLETED (exit code 0)
-Nodes: 1
-Cores per node: 18
-CPU Utilized: 00:00:55
-CPU Efficiency: 11.32% of 00:08:06 core-walltime
-Job Wall-clock time: 00:00:27
-Memory Utilized: 1.54 MB
-Memory Efficiency: 0.00% of 120.00 GB
