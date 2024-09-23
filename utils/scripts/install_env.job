@@ -6,7 +6,7 @@
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=18
 #SBATCH --time=04:00:00
-#SBATCH --output=/home/scur1769/ALMA-Matters/utils/script_outputs/InstallEnvironment_%A.out
+#SBATCH --output=/home/scur1772/ALMA-Matters/utils/script_outputs/InstallEnvironment_%A.out
 
 module purge
 module load 2022
@@ -14,7 +14,8 @@ module load Anaconda3/2022.05
 
 cd $HOME
 pwd
-conda env create -f "/home/scur1769/ALMA-Matters/DL4_env.yml"
+conda config --add channels pytorch
+conda env create -f "/home/scur1772/ALMA-Matters/DL4_env.yml"
 
 # Activate the conda environment
 source activate DL4_env
@@ -23,3 +24,5 @@ source activate DL4_env
 conda list
 
 # for any additional packages, edit the DL4_env.yml file and rerun this script with conda env update -f DL4_env.yml
+# also make sure to change the scur username to your own
+# I had to slightly edit the env file to get it to work as it could not find this pytorch version for some reason. - Ian
