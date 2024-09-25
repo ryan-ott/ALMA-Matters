@@ -16,12 +16,11 @@ source activate DL4_env
 
 python -uc "import torch; print('GPU available?', torch.cuda.is_available())"
 
-cd $HOME/ALMA-Matters/compression/pruning/TransformerCompression/experiments
+cd $HOME/ALMA-Matters/
 
-echo "+++Directory: $(pwd)"
-
-python run_slicegpt.py \
-        --model "haoranxu/ALMA-7B" \
+python compression/pruning/TransformerCompression/experiments/run_slicegpt.py \
+        # --model "haoranxu/ALMA-7B" \
+        --model "meta-llama/Llama-2-7B-hf" \
         --save-dir $HOME/ALMA-Matters/models/ \
         --sparsity 0.25 \
         --device "cuda:0" \

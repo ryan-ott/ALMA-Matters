@@ -18,15 +18,12 @@ python -uc "import torch; print('GPU available?', torch.cuda.is_available())"
 
 cd $HOME/ALMA-Matters/
 
-echo "+++Directory: $(pwd)"
-
 python evaluation/translation_eval2.py \
-    --data_dir $HOME/ALMA-Matters/data/datasets/human-translations \
-    --results_dir $HOME/ALMA-Matters/evaluation/results \
-    --sliced_model_path $HOME/ALMA-Matters/models \
-    --model_name "ALMA-7B" \
-    --sparsity 0.25 \
-    --beam 5 \
-    --gen_max_tokens 256 \
-    --batch_size 8 \
-    --dtype float16
+--model "haoranxu/ALMA-7B" \
+--sliced-model-path $HOME/ALMA-Matters/models \
+--sparsity 0.25 \
+--no-wandb \
+--save-dir $HOME/ALMA-Matters/evaluation/results \
+--data_dir $HOME/ALMA-Matters/datasets/human-translations \
+--beam 5 \
+--dtype float16

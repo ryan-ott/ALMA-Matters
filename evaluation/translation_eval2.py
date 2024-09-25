@@ -12,26 +12,70 @@ from slicegpt.hf_utils import load_sliced_model, get_model_and_tokenizer
 
 def get_parser():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--data_dir', required=True, help="Directory containing JSON test data files.")
-    parser.add_argument('--results_dir', required=True, help="Directory to save evaluation results.")
-    parser.add_argument('--model_dir', required=False, help="Directory containing the model files.")
-    parser.add_argument('--model_name', required=True, help="Model name to find the correct .pt and .json files.")
-    parser.add_argument('--sliced_model_path', help="Directory containing the sliced model (if applicable).")
-    parser.add_argument('--sparsity', type=float, help="Sparsity level of the sliced model (if applicable).")
-    parser.add_argument('--beam', type=int, required=True, help="Beam size for generation.")
-    parser.add_argument('--gen_max_tokens', type=int, default=256, help="Max number of tokens to generate.")
-    parser.add_argument('--batch_size', type=int, default=8, help="Batch size for generation.")
-    parser.add_argument('--dtype', required=True, help="Data type: float16, bfloat16, etc.")
-    parser.add_argument('--distribute_model', action="store_true", help="Distribute model across multiple GPUs.")
+    parser.add_argument(
+        '--model',
+        required=True,
+        help="Model to load e.g. meta-llama/Llama-2-7b-hf or haoranxu/ALMA-7B",)
+    parser.add_argument(
+        '--model-path',
+        type=str,
+        default=None,
+        help="Path to load the model and tokenizer from (required for local models, not required for HF models)",)
+    parser.add_argument(
+        '--sliced-model-path',
+        help="Directory containing the sliced model (if applicable).")
+    parser.add_argument(
+        '--sparsity',
+        type=float,
+        help="Sparsity level of the sliced model (if applicable).")
+    parser.add_argument(
+        '--round-interval',
+        type=int,
+        default=8,  # Best for A100 GPUs according to Snellius docs
+        help="Interval for rounding the model weights.")
+    parser.add_argument(
+        '--hf-token',
+        type=str,
+        default=os.getenv('HF_TOKEN', None))
+    parser.add_argument(
+        '--batch-size',
+        type=int,
+        default=8,
+        help="Batch size for evaluating with lm eval harness.")
+    parser.add_argument(
+        '--wandb-project',
+        type=str,
+        default="slicegpt-lm-eval",
+        help="wandb project name.")
+    parser.add_argument(
+        '--no-wandb',
+        action="store_true",
+        help="Disable wandb.")
+    parser.add_argument(
+        '--save-dir',
+        type=str,
+        default=".",
+        help="Path to save the lm eval results")
+    parser.add_argument(
+        '--data_dir',
+        required=True,
+        help="Directory containing JSON test data files.")
+    parser.add_argument(
+        '--beam',
+        type=int,
+        required=True,
+        help="Beam size for generation.")
+    parser.add_argument(
+        '--gen_max_tokens',
+        type=int,
+        default=256,
+        help="Max number of tokens to generate.")
+    parser.add_argument(
+        '--dtype',
+        required=True,
+        help="Data type: float16, bfloat16, etc.")
     return parser
 
-LANG_MAP = {  # TODO: fix this uppp
-    'eng_Latn': 'English',
-    'deu_Latn': 'German',
-    'ces_Latn': 'Czech',
-    'rus_Cyrl': 'Russian',
-    'zho_Hans': 'Chinese'
-}
 
 def dynamic_batching(tokenizer, texts, batch_size, max_length):
     batch = []
@@ -50,49 +94,45 @@ def dynamic_batching(tokenizer, texts, batch_size, max_length):
     if len(batch) > 0:
         yield batch
 
+
 def load_model(args):
     if args.sliced_model_path:
-        logging.info(f"Loading sliced {args.model_name} model from {args.sliced_model_path} with sparsity {args.sparsity}")
+        logging.info(f"Loading sliced {args.model} model from {args.sliced_model_path} with sparsity {args.sparsity}")
         model_adapter, tokenizer = load_sliced_model(
-            args.model_name,
+            args.model,
             args.sliced_model_path,
+            token=args.hf_token,
             sparsity=args.sparsity,
-            round_interval=8  # Suitable for A100 as per snellius docs
+            round_interval=args.round_interval
         )
     else:
-        logging.info(f"Loading original {args.model_name} model")
-        model_adapter, tokenizer = get_model_and_tokenizer(args.model_name, args.model_dir)
+        logging.info(f"Loading original {args.model} model")
+        model_adapter, tokenizer = get_model_and_tokenizer(args.model, args.model_dir)
 
     model_adapter.model.to('cuda')
 
     return model_adapter, tokenizer
 
-def main():
-    parser = get_parser()
-    args = parser.parse_args()
 
-    # Set logging configuration
-    logging.basicConfig(level=logging.INFO)
-
-    # Load the model (either sliced or unsliced)
+def main(args):
     model_adapter, tokenizer = load_model(args)
     
-    # Iterate over all files in the data_dir
-    for filename in os.listdir(args.data_dir):
+    for filename in tqdm(os.listdir(args.data_dir), desc="Evaluating tranlations", unit="language pair"):
         if filename.endswith(".json"):
             file_path = os.path.join(args.data_dir, filename)
             src, tgt = filename.replace("ALMA_test_", "").replace(".json", "").split('-')
-
             result_filename = f"result_{src}-{tgt}.txt"
-            result_path = os.path.join(args.results_dir, result_filename)
+            result_path = os.path.join(args.save_dir, result_filename)
 
             with open(result_path, "w") as file_out:
                 with open(file_path, 'r') as f:
                     lines = json.load(f)
 
                 total_batches = (len(lines) + args.batch_size - 1) // args.batch_size
-                for batch in tqdm(dynamic_batching(tokenizer, [line['translation'][src] for line in lines], 
-                                                   args.batch_size, args.gen_max_tokens), total=total_batches):
+                for batch in tqdm(dynamic_batching(tokenizer,
+                                                   [line['translation'][src] for line in lines],
+                                                   args.batch_size,
+                                                   args.gen_max_tokens), total=total_batches):
                     prompts = [f"Translate this from {src} to {tgt}:\n{src}: {line}\n{tgt}:" for line in batch]
 
                     inputs = tokenizer(prompts, return_tensors="pt", padding=True).to('cuda')
@@ -112,4 +152,7 @@ def main():
             logging.info(f"Completed evaluation for {src}-{tgt}. Results saved to {result_path}")
 
 if __name__ == "__main__":
-    main()
+    parser = get_parser()
+    args = parser.parse_args()
+    logging.basicConfig(level=logging.INFO)
+    main(args)
