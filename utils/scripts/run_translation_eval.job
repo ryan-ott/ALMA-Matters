@@ -16,19 +16,17 @@ source activate DL4_env
 
 python -uc "import torch; print('GPU available?', torch.cuda.is_available())"
 
-cd $HOME/ALMA-Matters/evaluation/
+cd $HOME/ALMA-Matters/
 
 echo "+++Directory: $(pwd)"
 
-python translation_eval.py \
-        --fin $HOME/ALMA-Matters/data/translation/test.eng_Latn.deu_Latn.tsv \
-        --fout $HOME/ALMA-Matters/data/translation/test.eng_Latn.deu_Latn.tsv \
-        --ckpt $HOME/ALMA-Matters/models/ALMA-7B \
-        --src eng_Latn \
-        --tgt deu_Latn \
-        --dtype float16 \
-        --model haoranxu/ALMA-7B \
-        --beam 5 \
-        --gen_max_tokens 256 \
-        --batch_size 8
-    
+python evaluation/translation_eval2.py \
+    --data_dir $HOME/ALMA-Matters/data/datasets/human-translations \
+    --results_dir $HOME/ALMA-Matters/evaluation/results \
+    --sliced_model_path $HOME/ALMA-Matters/models \
+    --model_name "ALMA-7B" \
+    --sparsity 0.25 \
+    --beam 5 \
+    --gen_max_tokens 256 \
+    --batch_size 8 \
+    --dtype float16
