@@ -4,9 +4,9 @@ Compressing ALMA for the DL4NLP course
 
 ## Overview
 
-This repository focuses on compressing the ALMA model using techniques like slicing, pruning, and distillation. It includes code for running experiments, evaluating translation performance, and more.
+This repository focuses on compressing the ALMA model using techniques like pruning, quantisation and distillation while retaining translation performance. It includes code for running experiments, evaluating performance, and more.
 
-> The repository also includes the [TransformerCompression](https://github.com/ryan-ott/TransformerCompression) submodule, a fork of the SliceGPT paper's code which provides the framework used for model slicing.
+> The repository also includes the [TransformerCompression](https://github.com/ryan-ott/TransformerCompression) submodule, a fork of the SliceGPT paper's code which provides the framework used for model pruning.
 
 ## Installation
 
@@ -33,7 +33,7 @@ conda activate DL4_env
 ```
 
 ### 3. Updating the Submodule (When Necessary)
-If the submodule is updated in the remote repository and you need to pull the latest changes, run:
+If a submodule is updated in the remote repository and you need to pull the latest changes, run:
 
 ```bash
 git submodule update --remote
