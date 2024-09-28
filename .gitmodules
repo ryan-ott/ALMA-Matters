@@ -1,0 +1,3 @@
+[submodule "SliceGPT"]
+	path = compression/pruning/TransformerCompression
+	url = https://github.com/ryan-ott/TransformerCompression.git
