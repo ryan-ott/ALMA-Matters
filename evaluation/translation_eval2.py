@@ -7,7 +7,7 @@ import logging
 from tqdm import tqdm
 
 # Utilities from the SliceGPT package
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../compression/pruning/TransformerCompression/src")))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../compression/pruning/TransformerCompression/src")))
 from slicegpt.hf_utils import load_sliced_model, get_model_and_tokenizer
 
 def get_parser():
@@ -107,7 +107,7 @@ def load_model(args):
         )
     else:
         logging.info(f"Loading original {args.model} model")
-        model_adapter, tokenizer = get_model_and_tokenizer(args.model, args.model_dir)
+        model_adapter, tokenizer = get_model_and_tokenizer(args.model)
 
     model_adapter.model.to('cuda')
 
