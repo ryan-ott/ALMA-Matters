@@ -136,7 +136,6 @@ def main(args):
         # evaluate_model()
         pass
 
-    # Add the source setence into the prompt template
     # prompt="Translate this from German to English:\German: Ich esse gerne Fischbrötchen wenn das Wetter schön ist.\nEnglish:"
     input_ids = tokenizer(args.prompt, return_tensors="pt", padding=True, max_length=40, truncation=True).input_ids.cuda()
 

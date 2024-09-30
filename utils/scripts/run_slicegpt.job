@@ -6,7 +6,7 @@
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=18
 #SBATCH --time=01:00:00
-#SBATCH --output=/home/scur1769/ALMA-Matters/utils/script_outputs/RunSliceGPT_%A.out
+#SBATCH --output=/home/scur1769/ALMA-Matters/utils/outputs/RunSliceGPT_%A.out
 
 module purge
 module load 2022
