@@ -18,27 +18,27 @@ python -uc "import torch; print('GPU available?', torch.cuda.is_available())"
 
 cd $HOME/ALMA-Matters/
 
-# NOTE: TO RUN A SINGLE TRANSLATION, USE THIS (REDUCED BATCH-SIZE AND BEAM WIDTH FOR ZH-EN FOR SOME REASON)
-# python evaluation/translation_eval2.py \
-# --model "haoranxu/ALMA-7B" \
-# --sliced-model-path $HOME/ALMA-Matters/models \
-# --sparsity 0.25 \
-# --save-dir $HOME/ALMA-Matters/ \
-# --json-file $HOME/ALMA-Matters/datasets/human-translations/ALMA_test_zh-en.json \
-# --dtype float16 \
-# --batch-size 4 \
-# --beam 3
+# NOTE: TO RUN A SINGLE TRANSLATION PAIR, USE THIS (REDUCED BATCH-SIZE FOR ZH-EN, IDK WHY)
+python evaluation/translation_eval2.py \
+--model "haoranxu/ALMA-7B" \
+--sliced-model-path $HOME/ALMA-Matters/models \
+--sparsity 0.20 \
+--save-dir $HOME/ALMA-Matters/evaluation/results/20-slice \
+--json-file $HOME/ALMA-Matters/datasets/human-translations/ALMA_test_zh-en.json \
+--dtype float16 \
+--batch-size 4 \
+--beam 5
 
 # NOTE: TO RUN ALL TRANSLATIONS IN ONE GO, USE THIS
-for json_file in $HOME/ALMA-Matters/datasets/human-translations/*.json
-do
-  echo "Processing file: $json_file"
-  python evaluation/translation_eval2.py \
-    --model "haoranxu/ALMA-7B" \
-    --sliced-model-path $HOME/ALMA-Matters/models \
-    --sparsity 0.25 \
-    --save-dir $HOME/ALMA-Matters/evaluation/results \
-    --json-file $json_file \
-    --beam 5 \
-    --dtype float16
-done
+# for json_file in $HOME/ALMA-Matters/datasets/human-translations/*.json
+# do
+#   echo "Processing file: $json_file"
+#   python evaluation/translation_eval2.py \
+#     --model "haoranxu/ALMA-7B" \
+#     --sliced-model-path $HOME/ALMA-Matters/models \
+#     --sparsity 0.20 \
+#     --save-dir $HOME/ALMA-Matters/evaluation/results/20-slice \
+#     --json-file $json_file \
+#     --beam 5 \
+#     --dtype float16
+# done

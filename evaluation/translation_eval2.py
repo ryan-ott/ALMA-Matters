@@ -124,6 +124,7 @@ def main(args):
     model_adapter, tokenizer = load_model(args)
     # Extract source and target language from the file name
     src, tgt = os.path.basename(args.json_file).replace("ALMA_test_", "").replace(".json", "").split('-')
+    os.makedirs(args.save_dir, exist_ok=True)
     result_path = os.path.join(args.save_dir, f"result_{src}-{tgt}.txt")
 
     # Initialize the JSON generator
