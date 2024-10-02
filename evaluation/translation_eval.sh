@@ -1,16 +1,8 @@
-OUTPUT_DIR=${1}
+SLICE=${1}
 TEST_PAIRS=${2}
 
 
 set +e
-
-
-mkdir -p ${OUTPUT_DIR}
-
-
-
-
-
 
 ## Evaluation
 for pair in ${TEST_PAIRS//,/ }; do
@@ -24,7 +16,7 @@ for pair in ${TEST_PAIRS//,/ }; do
     fi
     echo "--------------------Results for ${pair}-------------------------------------"
     # src_path=results/result_${src}-${tgt}.txt
-    src_path=${OUTPUT_DIR}/baseline/result_${src}-${tgt}.txt
+    src_path=results/${SLICE}-slice/result_${src}-${tgt}.txt
     # tgt_path=./datasets/human-translations/ALMA_test_${src}${tgt}.json
     if [[ -f "../datasets/human-translations/ALMA_test_${src}-${tgt}.txt" ]]; then
         echo "Target text file already exists. Using existing file."
@@ -55,7 +47,7 @@ END
 
 
     # output_path=${OUTPUT_DIR}/result_${src}-${tgt}.txt
-    output_path=${OUTPUT_DIR}/result_${src}-${tgt}.txt
+    output_path=results/${SLICE}-slice/result_${src}-${tgt}.txt
     # cp ${src_path} ${output_path}
 
 
