@@ -21,7 +21,7 @@ cd $HOME/ALMA-Matters/
 python compression/pruning/TransformerCompression/experiments/run_slicegpt.py \
         --model "haoranxu/ALMA-7B" \
         --save-dir $HOME/ALMA-Matters/models/ \
-        --sparsity 0.20 \
+        --sparsity 0.30 \
         --device "cuda:0" \
         --eval-baseline \
         --no-wandb
