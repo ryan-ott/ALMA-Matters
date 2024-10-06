@@ -15,7 +15,13 @@ for pair in ${TEST_PAIRS//,/ }; do
         TOK="ja-mecab"
     fi
     echo "--------------------Results for ${pair}-------------------------------------"
-    # src_path=results/result_${src}-${tgt}.txt
+    # if [${SLICE} == "Baseline"]; then
+    #     src_path=results/Baseline/result_${src}-${tgt}.txt
+    #     output_path=results/Baseline/result_${src}-${tgt}.txt
+    # else
+    #     src_path=results/${SLICE}-slice/result_${src}-${tgt}.txt
+    #     output_path=results/${SLICE}-slice/result_${src}-${tgt}.txt
+    # fi
     src_path=results/${SLICE}-slice/result_${src}-${tgt}.txt
     # tgt_path=./datasets/human-translations/ALMA_test_${src}${tgt}.json
     if [[ -f "../datasets/human-translations/ALMA_test_${src}-${tgt}.txt" ]]; then
@@ -50,6 +56,9 @@ END
     output_path=results/${SLICE}-slice/result_${src}-${tgt}.txt
     # cp ${src_path} ${output_path}
 
+    # Baseline results
+    # src_path=results/Baseline/result_${src}-${tgt}.txt
+    # output_path=results/Baseline/result_${src}-${tgt}.txt
 
     echo "Source Path: $src_path"
     echo "Output Path: $output_path"
