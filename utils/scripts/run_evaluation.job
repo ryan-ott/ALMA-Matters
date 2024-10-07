@@ -1,0 +1,82 @@
+#!/bin/bash
+
+#SBATCH --partition=gpu
+#SBATCH --gpus=1
+#SBATCH --job-name=RunEval_part
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=18
+#SBATCH --time=04:00:00
+#SBATCH --output=/home/scur1772/ALMA-Matters/utils/script_outputs/RunEval_part_%A.out
+
+# Load necessary modules
+module purge
+module load 2023
+module load Python/3.11.3-GCCcore-12.3.0  # Load the Python 3.11.3 module
+module load PyTorch/2.1.2-foss-2023a-CUDA-12.1.1  # Load PyTorch with CUDA support
+
+# Install missing dependencies locally
+pip install --user tqdm transformers datasets sentencepiece accelerate peft halo ml_collections sacrebleu comet
+
+# Add the local installation directory to the PATH
+export PATH=$HOME/.local/bin:$PATH
+
+# Set directories and test pairs
+OUTPUT_DIR="$HOME/ALMA-Matters/evaluation/results/baseline"
+TEST_PAIRS="en-cs,de-en,en-is,en-ru,is-en,zh-en"  # Define language pairs as needed
+TRUE_TRANSLATIONS_DIR="$HOME/ALMA-Matters/datasets/human-translations"
+
+# Tokenization and evaluation loop
+for pair in ${TEST_PAIRS//,/ }; do
+    src=$(echo ${pair} | cut -d "-" -f 1)
+    tgt=$(echo ${pair} | cut -d "-" -f 2)
+
+    # Set tokenization logic
+    TOK="13a"
+    if [ ${tgt} == "zh" ]; then
+        TOK="zh"
+    elif [ ${tgt} == "ja" ]; then
+        TOK="ja-mecab"
+    fi
+
+    echo "--------------------Results for ${pair}-------------------------------------"
+
+    # Paths to source, target, and generated output
+    src_path=${TRUE_TRANSLATIONS_DIR}/ALMA_test_${src}-${tgt}.json
+    tgt_path=${TRUE_TRANSLATIONS_DIR}/ALMA_test_${src}-${tgt}.json
+    output_path=${OUTPUT_DIR}/result_${src}-${tgt}.txt
+
+    # Extract the true source and target sentences from the JSON file
+    true_src=$(jq -r '.[].translation.'"${src}" ${src_path})
+    true_tgt=$(jq -r '.[].translation.'"${tgt}" ${tgt_path})
+
+    # Write extracted data to temporary files
+    echo "${true_src}" > ${OUTPUT_DIR}/true_${src}.txt
+    echo "${true_tgt}" > ${OUTPUT_DIR}/true_${tgt}.txt
+
+    # Run BLEU evaluation
+    SACREBLEU_FORMAT=text sacrebleu -tok ${TOK} -w 2 ${OUTPUT_DIR}/true_${tgt}.txt < ${output_path} > ${output_path}.bleu
+    cat ${output_path}.bleu
+
+    # Run COMET evaluations
+    comet-score -s ${OUTPUT_DIR}/true_${src}.txt -t ${output_path} -r ${OUTPUT_DIR}/true_${tgt}.txt --batch_size 256 --model Unbabel/wmt22-comet-da --gpus 1 > ${output_path}.comet
+    comet-score -s ${OUTPUT_DIR}/true_${src}.txt -t ${output_path} --batch_size 256 --model Unbabel/wmt22-cometkiwi-da --gpus 1 > ${output_path}.cometkiwi
+    comet-score -s ${OUTPUT_DIR}/true_${src}.txt -t ${output_path} --batch_size 8 --model Unbabel/wmt23-cometkiwi-da-xxl --gpus 1 > ${output_path}.cometkiwi_10b
+    comet-score -s ${OUTPUT_DIR}/true_${src}.txt -t ${output_path} --batch_size 8 --model Unbabel/XCOMET-XXL --gpus 1 --to_json ${output_path}.xcomet.output.json > ${output_path}.xcomet_10b    
+
+    # Display final results
+    tail -n 1 ${output_path}.comet
+done
+
+# Print summary results
+for pair in ${TEST_PAIRS//,/ }; do
+    src=$(echo ${pair} | cut -d "-" -f 1)
+    tgt=$(echo ${pair} | cut -d "-" -f 2)
+    output_path=${OUTPUT_DIR}/result_${src}-${tgt}.txt
+
+    echo "---------------------------${src}-${tgt}-------------------------------"
+    cat ${output_path}.bleu
+    tail -n 1 ${output_path}.comet
+    tail -n 1 ${output_path}.cometkiwi
+    tail -n 1 ${output_path}.cometkiwi_10b
+    tail -n 2 ${output_path}.xcomet_10b
+done

@@ -1,0 +1,28 @@
+#!/bin/bash
+
+#SBATCH --partition=gpu
+#SBATCH --gpus=1
+#SBATCH --job-name=RunInferenceBaseline
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=18
+#SBATCH --time=04:00:00
+#SBATCH --output=/home/scur1772/ALMA-Matters/utils/script_outputs/RunInferenceBaseline_%A.out
+
+module purge
+module load 2023
+module load Anaconda3/2023.07-2
+
+source activate DL4_env
+
+python -uc "import torch; print('GPU available?', torch.cuda.is_available())"
+
+cd $HOME/ALMA-Matters/
+
+python evaluation/translation_eval2.py \
+--model "haoranxu/ALMA-7B" \
+--no-wandb \
+--save-dir $HOME/ALMA-Matters/evaluation/results/baseline \
+--data_dir $HOME/ALMA-Matters/datasets/human-translations \
+--beam 5 \
+--dtype float16 \
+--hf-token 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
