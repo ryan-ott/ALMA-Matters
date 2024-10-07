@@ -1,0 +1,32 @@
+#!/bin/bash
+
+#SBATCH --partition=gpu
+#SBATCH --gpus=1
+#SBATCH --job-name=RunInferenceBaselineMetrics
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=18
+#SBATCH --time=04:00:00
+#SBATCH --output=/home/scur1772/ALMA-Matters/utils/script_outputs/RunInferenceBaselineMetrics_%A.out
+
+# Load necessary modules
+module purge
+module load 2023
+module load Python/3.11.3-GCCcore-12.3.0  # Load the Python 3.11.3 module
+module load PyTorch/2.1.2-foss-2023a-CUDA-12.1.1  # Load PyTorch with CUDA support
+
+# Install missing dependencies locally
+pip install --user tqdm transformers datasets sentencepiece accelerate peft halo ml_collections
+
+# Verify GPU availability
+python -uc "import torch; print('GPU available?', torch.cuda.is_available())"
+
+cd $HOME/ALMA-Matters/
+
+# Run your inference script
+python evaluation/translation_eval3.py \
+  --model "haoranxu/ALMA-7B" \
+  --save-dir $HOME/ALMA-Matters/evaluation/results/baseline \
+  --data_dir $HOME/ALMA-Matters/datasets/human-translations \
+  --beam 5 \
+  --dtype float16 \
+  --hf-token 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
