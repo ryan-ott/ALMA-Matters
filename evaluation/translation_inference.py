@@ -9,7 +9,7 @@ import torch
 from tqdm import tqdm
 
 # Utilities from the SliceGPT package
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../compression/pruning/TransformerCompression/src")))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../compression/pruning/TransformerCompression/src")))
 from slicegpt.hf_utils import load_sliced_model, get_model_and_tokenizer
 
 
