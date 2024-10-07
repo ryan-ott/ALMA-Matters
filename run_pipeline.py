@@ -84,7 +84,7 @@ def get_parser():
     parser.add_argument(
         '--fine-tune',
         action="store_true",
-        help="Whetehr to fine-tune the model")
+        help="Whether to fine-tune the model")
     parser.add_argument(
         '--compress',
         action="store_true",

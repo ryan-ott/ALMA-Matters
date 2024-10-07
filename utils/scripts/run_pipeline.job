@@ -16,4 +16,12 @@ cd $HOME/ALMA-Matters
 
 source activate DL4_env
 
-python run_pipeline.py --model "haoranxu/ALMA-7B" --sliced-model-path "models" --sparsity 0.25 --no-wandb --dtype "float16" --prompt "Translate this from German to English:\German:Das ist ein Test um zu sehen ob die Übersetzung funktioniert.\nEnglish: "
+python -uc "import torch; print('GPU available?', torch.cuda.is_available())"
+
+# BASE MODEL
+python run_pipeline.py \
+        --model "haoranxu/ALMA-7B" \
+        --prompt "Translate this from German to English:\German:Das ist ein Test um zu sehen ob die Übersetzung funktioniert.\nEnglish: "
+
+# SLICED MODEL
+# python run_pipeline.py --model "haoranxu/ALMA-7B" --sliced-model-path "models" --sparsity 0.3 --no-wandb --dtype "float16" --prompt "Translate this from German to English:\German:Das ist ein Test um zu sehen ob die Übersetzung funktioniert.\nEnglish: "
