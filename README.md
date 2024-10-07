@@ -32,6 +32,20 @@ conda env create -f DL4_env.yml
 conda activate DL4_env
 ```
 
+#### 2.1. SliceGPT Installation
+The `TransformerCompression` submodule is arranged as a Python package, so to run specific "experiemnts" such as slicing, run the following commands:
+
+```bash
+cd compression/pruning/TransformerCompression
+pip install -e .[experiment]
+```
+
+For additional recovery fine-tuning, you can install the `finetune` dependencies:
+
+```bash
+pip install -e .[experiment,finetune]
+```
+
 ### 3. Updating the Submodule (When Necessary)
 If a submodule is updated in the remote repository and you need to pull the latest changes, run:
 
