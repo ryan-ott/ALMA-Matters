@@ -1,7 +1,6 @@
 import argparse
 import gc
 import ijson
-import json
 import logging
 import os
 import sys

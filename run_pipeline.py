@@ -1,21 +1,16 @@
 """
 Main script to run entire pipeline (from fine-tuning, compression to evaluation)
 """
-# python run_pipeline.py --model "haoranxu/ALMA-7B" --sliced-model-path "models" --sparsity 0.25 --no-wandb --dtype "float16" --prompt "Translate this from English to German:\English:Ich bin gespannt wie gut diese Übersätzung wird\nGerman:"
-
 import argparse
-import json
 import logging
 import os
 import sys
 import torch
-from transformers import AutoModelForCausalLM, LlamaTokenizer
-from tqdm import tqdm
+from transformers import AutoModelForCausalLM, AutoTokenizer
 
 # Utilities from the SliceGPT package
-path = os.path.abspath(os.path.join(os.path.dirname(__file__), "compression/pruning/TransformerCompression/src"))
-sys.path.append(path)
-from slicegpt.hf_utils import load_sliced_model, get_model_and_tokenizer
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "compression/pruning/TransformerCompression/src")))
+from slicegpt.hf_utils import load_sliced_model
 
 def get_parser():
     parser = argparse.ArgumentParser()
@@ -79,7 +74,7 @@ def get_parser():
         help="Max number of tokens to generate.")
     parser.add_argument(
         '--dtype',
-        required=True,
+        default="float16",
         help="Data type: float16, bfloat16, etc.")
     parser.add_argument(
         '--fine-tune',
@@ -122,14 +117,17 @@ def main(args):
     if args.sliced_model_path:
         model, tokenizer = load_alma_model(args)
     else:
-        model = AutoModelForCausalLM.from_pretrained(args.model, torch_dtype=torch.float16, device_map="auto")
-        tokenizer = LlamaTokenizer.from_pretrained(args.model, padding_side='left')
+        model = AutoModelForCausalLM.from_pretrained(args.model, torch_dtype=torch.float16).to('cuda')
+        tokenizer = AutoTokenizer.from_pretrained(args.model, padding_side='left', device='cuda')
 
     input_ids = tokenizer(args.prompt, return_tensors="pt", padding=True, max_length=40, truncation=True).input_ids.cuda()
 
     # Translation
     with torch.no_grad():
-        generated_ids = model.model.generate(input_ids=input_ids, num_beams=args.beam, max_new_tokens=20, do_sample=True, temperature=0.6, top_p=0.9)
+        if args.sliced_model_path:
+            generated_ids = model.model.generate(input_ids=input_ids, num_beams=args.beam, max_new_tokens=20, do_sample=True, temperature=0.6, top_p=0.9)
+        else:
+            generated_ids = model.generate(input_ids=input_ids, num_beams=args.beam, max_new_tokens=20, do_sample=True, temperature=0.6, top_p=0.9)
     outputs = tokenizer.batch_decode(generated_ids, skip_special_tokens=True)
     print("++++++++++++++")
     print(outputs)

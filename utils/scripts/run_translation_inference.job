@@ -23,7 +23,7 @@ python evaluation/translation_inference.py \
         --model "haoranxu/ALMA-7B" \
         --sliced-model-path $HOME/ALMA-Matters/models \
         --sparsity 0.30 \
-        --save-dir $HOME/ALMA-Matters/evaluation/results/blob \
+        --save-dir $HOME/ALMA-Matters/evaluation/results \
         --json-file $HOME/ALMA-Matters/datasets/human-translations/ALMA_test_ru-en.json \
         --dtype float16 \
         --batch-size 8 \
