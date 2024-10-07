@@ -119,7 +119,6 @@ def load_model(args):
     return model_adapter, tokenizer
 
 
-
 def main(args):
     model_adapter, tokenizer = load_model(args)
     # Extract source and target language from the file name
@@ -132,14 +131,7 @@ def main(args):
     text_gen = (item['translation'][src] for item in data_gen)
 
     with open(result_path, "w", encoding='utf-8') as file_out:
-        try:
-            with open(args.json_file, 'r', encoding='utf-8') as f:
-                total_items = len(json.load(f))
-            total_batches = (total_items + args.batch_size - 1) // args.batch_size
-        except:
-            total_batches = None  # Fallback if total items can't be determined
-
-        for batch in tqdm(dynamic_batching(tokenizer, text_gen, args.batch_size, args.gen_max_tokens), total=total_batches):
+        for batch in tqdm(dynamic_batching(tokenizer, text_gen, args.batch_size, args.gen_max_tokens)):
             prompts = [f"Translate this from {src} to {tgt}:\n{src}: {line}\n{tgt}:" for line in batch]
             inputs = tokenizer(prompts, return_tensors="pt", padding=True, truncation=True, max_length=args.gen_max_tokens).to(args.device)
             

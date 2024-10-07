@@ -1,7 +1,7 @@
 """
 Main script to run entire pipeline (from fine-tuning, compression to evaluation)
 """
-# python run_pipeline.py --model "haoranxu/ALMA-7B" --sliced-model-path "models" --sparsity 0.25 --no-wandb --dtype "float16" --prompt "Translate this from German to English:\German:Ich bin gespannt wie gut diese Übersätzung wird\nEnglish:"
+# python run_pipeline.py --model "haoranxu/ALMA-7B" --sliced-model-path "models" --sparsity 0.25 --no-wandb --dtype "float16" --prompt "Translate this from English to German:\English:Ich bin gespannt wie gut diese Übersätzung wird\nGerman:"
 
 import argparse
 import json
@@ -124,25 +124,14 @@ def main(args):
     else:
         model = AutoModelForCausalLM.from_pretrained(args.model, torch_dtype=torch.float16, device_map="auto")
         tokenizer = LlamaTokenizer.from_pretrained(args.model, padding_side='left')
-    
-    # * See whether we wanna keep this structure
-    if args.fine_tune:
-        # fine_tune_model()
-        pass
-    if args.compress:
-        # compress_model()
-        pass
-    if args.evaluate:
-        # evaluate_model()
-        pass
 
-    # prompt="Translate this from German to English:\German: Ich esse gerne Fischbrötchen wenn das Wetter schön ist.\nEnglish:"
     input_ids = tokenizer(args.prompt, return_tensors="pt", padding=True, max_length=40, truncation=True).input_ids.cuda()
 
     # Translation
     with torch.no_grad():
         generated_ids = model.model.generate(input_ids=input_ids, num_beams=args.beam, max_new_tokens=20, do_sample=True, temperature=0.6, top_p=0.9)
     outputs = tokenizer.batch_decode(generated_ids, skip_special_tokens=True)
+    print("++++++++++++++")
     print(outputs)
 
 
