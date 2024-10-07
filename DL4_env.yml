@@ -1,9 +1,15 @@
 name: DL4_env
 channels:
+<<<<<<< HEAD
   - defaults
   - conda-forge
   - pytorch
   - nvidia
+=======
+  - pytorch
+  - conda-forge
+  - defaults
+>>>>>>> d0b73890b7c36e82ae3a1d3c12e6ac2e6d00caef
 dependencies:
   - python=3.10
   - pytorch=1.13.0
