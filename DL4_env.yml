@@ -1,4 +1,9 @@
 name: DL4_env
+channels:
+  - defaults
+  - conda-forge
+  - pytorch
+  - nvidia
 dependencies:
   - python=3.10
   - pytorch=1.13.0
@@ -14,3 +19,6 @@ dependencies:
     - halo
     - sentencepiece
     - ijson
+    - huggingface-hub
+    - unbabel-comet
+    - sacrebleu
