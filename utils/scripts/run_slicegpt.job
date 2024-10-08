@@ -21,8 +21,17 @@ cd $HOME/ALMA-Matters
 python compression/pruning/TransformerCompression/experiments/run_slicegpt.py \
         --model "haoranxu/ALMA-7B" \
         --save-dir $HOME/ALMA-Matters/models/ \
-        --sparsity 0.05 \
+        --sparsity 0.01 \
         --device "cuda" \
         --no-wandb \
         --eval-baseline \
         # --model "meta-llama/Llama-2-7B-hf" \
+
+echo "++++++++++++++++++++++++++++++++++++++"
+echo "+++++ TESTING NEWLY SLICED MODEL +++++"
+echo "++++++++++++++++++++++++++++++++++++++"
+python run_pipeline.py \
+        --model "haoranxu/ALMA-7B" \
+        --sliced-model-path "models" \
+        --sparsity 0.01 \
+        --prompt "Translate this from English to German:\nEnglish: Oh boy I sure hope this works!\nGerman:"

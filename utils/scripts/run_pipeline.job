@@ -22,12 +22,12 @@ python -uc "import torch; print('GPU available?', torch.cuda.is_available())"
 echo "Base ALMA-7B model"
 python run_pipeline.py \
         --model "haoranxu/ALMA-7B" \
-        --prompt "Translate this from English to German:\nEnglish: Oh boy I sure hope this works!\nGerman:"
+        --prompt "Translate this from German to English:\nGerman: Mal sehen's ob's mit der Übersetzung in die andere Richtung funktioniert!\nEnglish:"
 
 # SLICED MODEL
 echo "Sliced ALMA-7B model"
 python run_pipeline.py \
         --model "haoranxu/ALMA-7B" \
         --sliced-model-path "models" \
-        --sparsity 0.1 \
-        --prompt "Translate this from English to German:\nEnglish: Oh boy I sure hope this works!\nGerman:"
+        --sparsity 0.01 \
+        --prompt "Translate this from German to English:\nGerman: Mal sehen's ob's mit der Übersetzung in die andere Richtung funktioniert!\nEnglish:"
