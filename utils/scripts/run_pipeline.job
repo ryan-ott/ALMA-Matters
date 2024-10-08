@@ -29,5 +29,5 @@ echo "Sliced ALMA-7B model"
 python run_pipeline.py \
         --model "haoranxu/ALMA-7B" \
         --sliced-model-path "models" \
-        --sparsity 0.3 \
+        --sparsity 0.1 \
         --prompt "Translate this from English to German:\nEnglish: Oh boy I sure hope this works!\nGerman:"
