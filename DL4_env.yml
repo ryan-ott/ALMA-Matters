@@ -17,3 +17,5 @@ dependencies:
     - tqdm
     - halo
     - sentencepiece
+    - bitsandbytes
+    - ml_collections
