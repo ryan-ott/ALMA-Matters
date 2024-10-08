@@ -6,6 +6,9 @@ import json
 import logging
 import time  # Added import for timing
 from tqdm import tqdm
+import torch
+from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
+from peft import PeftModel
 
 # Utilities from the SliceGPT package
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../compression/pruning/TransformerCompression/src")))
@@ -25,6 +28,9 @@ def get_parser():
     parser.add_argument(
         '--sliced-model-path',
         help="Directory containing the sliced model (if applicable).")
+    parser.add_argument(
+        '--lora-model-path',
+        help="Directory containing the lora adaptor (if applicable).")
     parser.add_argument(
         '--sparsity',
         type=float,
@@ -114,6 +120,24 @@ def load_model(args):
             sparsity=args.sparsity,
             round_interval=args.round_interval
         )
+    elif args.lora_model_path:
+        logging.info(f"Loading lora adaptors for {args.model} model from {args.sliced_model_path}")
+        # Set up 4-bit quantization config
+        bnb_config = BitsAndBytesConfig(
+            load_in_4bit=True,
+            bnb_4bit_compute_dtype=torch.bfloat16, 
+            bnb_4bit_use_double_quant=True,
+            bnb_4bit_quant_type='nf4' 
+        )
+        # Load the model with quantization
+        base_model = AutoModelForCausalLM.from_pretrained(
+            args.model,
+            quantization_config=bnb_config,
+            device_map='auto',
+        )
+        adapter_dir = os.path.join(args.lora_model_path, 'adapter_model')
+        model_adapter = PeftModel.from_pretrained(base_model, adapter_dir)
+        tokenizer = AutoTokenizer.from_pretrained(args.lora_model_path)
     else:
         logging.info(f"Loading original {args.model} model")
         model_adapter, tokenizer = get_model_and_tokenizer(args.model)
