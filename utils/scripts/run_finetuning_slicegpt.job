@@ -1,0 +1,38 @@
+#!/bin/bash
+
+#SBATCH --partition=gpu
+#SBATCH --gpus=1
+#SBATCH --job-name=FinetuneSliceGPT
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=18
+#SBATCH --time=04:00:00
+#SBATCH --output=/home/scur1769/ALMA-Matters/utils/outputs/FinetuneSliceGPT_%A.out
+
+module purge
+module load 2022
+module load Anaconda3/2022.05
+
+source activate DL4_env
+
+python -uc "import torch; print('GPU available?', torch.cuda.is_available())"
+python --version
+
+cd $HOME/ALMA-Matters
+
+sparsity=0.25
+
+python compression/pruning/TransformerCompression/experiments/run_finetuning.py \
+        --model "haoranxu/ALMA-7B" \
+        --sliced-model-path "models" \
+        --sparsity $sparsity \
+        --save-dir $HOME/ALMA-Matters/models/ft \
+        --no-wandb \
+        --device "cuda" \
+        --finetune-train-nsamples 4096 \
+        --finetune-test-nsamples 128 \
+        --finetune-train-batch-size 1 \
+        --finetune-test-batch-size 1 \
+        --finetune-train-seqlen 2048 \
+        --finetune-test-seqlen 2048
+
+echo "Finished finetuning SliceGPT with sparsity $sparsity"

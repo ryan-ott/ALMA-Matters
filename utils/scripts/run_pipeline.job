@@ -12,22 +12,26 @@ module purge
 module load 2022
 module load Anaconda3/2022.05
 
-cd $HOME/ALMA-Matters
-
 source activate DL4_env
 
 python -uc "import torch; print('GPU available?', torch.cuda.is_available())"
+python --version
+
+cd $HOME/ALMA-Matters
+
+sparsity=0.25
+prompt='Translate this from English to German:\nEnglish: Lets see whether this translation succeeds.\German:'
 
 # BASE MODEL
 echo "Base ALMA-7B model"
 python run_pipeline.py \
         --model "haoranxu/ALMA-7B" \
-        --prompt "Translate this from German to English:\nGerman: Mal sehen's ob's mit der Übersetzung in die andere Richtung funktioniert!\nEnglish:"
+        --prompt "$prompt"
 
 # SLICED MODEL
 echo "Sliced ALMA-7B model"
 python run_pipeline.py \
         --model "haoranxu/ALMA-7B" \
-        --sliced-model-path "models" \
-        --sparsity 0.01 \
-        --prompt "Translate this from German to English:\nGerman: Mal sehen's ob's mit der Übersetzung in die andere Richtung funktioniert!\nEnglish:"
+        --sliced-model-path "models/ft" \
+        --sparsity $sparsity \
+        --prompt "$prompt"

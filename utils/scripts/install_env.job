@@ -13,11 +13,14 @@ module load 2022
 module load Anaconda3/2022.05
 
 cd $HOME/ALMA-Matters/
-conda config --set channel_priority false
 conda env create -f DL4_env.yml
 
 # Activate the conda environment
 source activate DL4_env
+
+cd compression/pruning/TransformerCompression
+
+conda run -n DL4_env pip install -e .[experiment,finetune]
 
 # Print packages in the environment
 conda list

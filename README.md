@@ -27,6 +27,14 @@ After cloning the repository, you need to set up the required Python environment
 
 To create and activate the environment:
 
+Simply run the installation script:
+
+```bash
+bash utils/scripts/install_env.job
+```
+
+Alternatively, you can manually create the environment using the provided `DL4_env.yml` file:
+
 ```bash
 conda env create -f DL4_env.yml
 conda activate DL4_env
@@ -37,13 +45,7 @@ The `TransformerCompression` submodule is arranged as a Python package, so to ru
 
 ```bash
 cd compression/pruning/TransformerCompression
-pip install -e .[experiment]
-```
-
-For additional recovery fine-tuning, you can install the `finetune` dependencies:
-
-```bash
-pip install -e .[experiment,finetune]
+conda run -n DL4_env pip install -e .[experiment,finetune]
 ```
 
 ### 3. Updating the Submodule (When Necessary)
