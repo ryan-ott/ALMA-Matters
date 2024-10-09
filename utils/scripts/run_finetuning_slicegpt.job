@@ -19,7 +19,7 @@ python --version
 
 cd $HOME/ALMA-Matters
 
-sparsity=0.25
+sparsity=0.10
 
 python compression/pruning/TransformerCompression/experiments/run_finetuning.py \
         --model "haoranxu/ALMA-7B" \
