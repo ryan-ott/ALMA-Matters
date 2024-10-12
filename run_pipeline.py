@@ -125,9 +125,27 @@ def main(args):
     # Translation
     with torch.no_grad():
         if args.sliced_model_path:
-            generated_ids = model.model.generate(input_ids=input_ids, num_beams=args.beam, max_new_tokens=20, do_sample=True, temperature=0.6, top_p=0.9)
+            generated_ids = model.model.generate(
+                input_ids=input_ids,
+                num_beams=args.beam,
+                max_new_tokens=args.gen_max_tokens,
+                do_sample=True,
+                temperature=0.6,
+                top_p=0.9,)
+                # repetition_penalty=1.2,  # THESE THREE HERE
+                # no_repeat_ngram_size=3,  # MIGHT HELP
+                # eos_token_id=tokenizer.eos_token_id)  # TO AVOID REPEATING
         else:
-            generated_ids = model.generate(input_ids=input_ids, num_beams=args.beam, max_new_tokens=20, do_sample=True, temperature=0.6, top_p=0.9)
+            generated_ids = model.generate(
+                input_ids=input_ids,
+                num_beams=args.beam,
+                max_length=args.gen_max_tokens,
+                do_sample=True,
+                temperature=0.6,
+                top_p=0.9,)
+                # repetition_penalty=1.2,
+                # no_repeat_ngram_size=3,
+                # eos_token_id=tokenizer.eos_token_id)
     outputs = tokenizer.batch_decode(generated_ids, skip_special_tokens=True)
     print("++++++++++++++")
     print(outputs)
