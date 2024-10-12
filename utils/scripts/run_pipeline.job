@@ -19,7 +19,7 @@ python --version
 
 cd $HOME/ALMA-Matters
 
-sparsity=0.10
+sparsity=0.2
 ende_prompt='Translate this from English to German:\nEnglish: Lets see whether this translation succeeds.\German:'
 deen_prompt='Translate this from German to English:\nGerman: Lasst uns sehen, ob diese Übersetzung gelingt.\nEnglish:'
 
@@ -33,7 +33,7 @@ python run_pipeline.py \
 echo "Sliced ALMA-7B model $sparsity English to German"
 python run_pipeline.py \
         --model "haoranxu/ALMA-7B" \
-        --sliced-model-path "models/ft" \
+        --sliced-model-path "models" \
         --sparsity $sparsity \
         --prompt "$ende_prompt"
 
@@ -47,6 +47,6 @@ python run_pipeline.py \
 echo "Sliced ALMA-7B model $sparsity German to English"
 python run_pipeline.py \
         --model "haoranxu/ALMA-7B" \
-        --sliced-model-path "models/ft" \
+        --sliced-model-path "models" \
         --sparsity $sparsity \
         --prompt "$deen_prompt"
