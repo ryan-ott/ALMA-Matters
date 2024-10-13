@@ -4,9 +4,9 @@ Compressing ALMA for the DL4NLP course
 
 ## Overview
 
-This repository focuses on compressing the ALMA model using techniques like slicing, pruning, and distillation. It includes code for running experiments, evaluating translation performance, and more.
+This repository focuses on compressing the ALMA model using techniques like pruning, quantisation and distillation while retaining translation performance. It includes code for running experiments, evaluating performance, and more.
 
-> The repository also includes the [TransformerCompression](https://github.com/ryan-ott/TransformerCompression) submodule, a fork of the SliceGPT paper's code which provides the framework used for model slicing.
+> The repository also includes the [TransformerCompression](https://github.com/ryan-ott/TransformerCompression) submodule, a fork of the SliceGPT paper's code which provides the framework used for model pruning.
 
 ## Installation
 
@@ -27,13 +27,36 @@ After cloning the repository, you need to set up the required Python environment
 
 To create and activate the environment:
 
+Simply run the installation script:
+
+```bash
+bash utils/scripts/install_env.job
+```
+
+Alternatively, you can manually create the environment using the provided `DL4_env.yml` file:
+
 ```bash
 conda env create -f DL4_env.yml
 conda activate DL4_env
 ```
 
+#### 2.1. SliceGPT Installation
+The `TransformerCompression` submodule is arranged as a Python package, so to run specific "experiemnts" such as slicing, run the following commands:
+
+```bash
+cd compression/pruning/TransformerCompression
+conda run -n DL4_env pip install -e .[experiment,finetune]
+```
+
+#### 2.2. QLoRA Installation
+The `qlora` submodule is independently usable (of the SliceGPT env), so to run (one of the) qlora training configurations, use the provided job file `run_qlora.job`; like this:
+
+```bash
+sbatch run_qlora.job
+```
+
 ### 3. Updating the Submodule (When Necessary)
-If the submodule is updated in the remote repository and you need to pull the latest changes, run:
+If a submodule is updated in the remote repository and you need to pull the latest changes, run:
 
 ```bash
 git submodule update --remote
