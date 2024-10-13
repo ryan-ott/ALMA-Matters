@@ -137,7 +137,7 @@ def load_model(args):
         )
         adapter_dir = os.path.join(args.lora_model_path, 'adapter_model')
         model_adapter = PeftModel.from_pretrained(base_model, adapter_dir)
-        tokenizer = AutoTokenizer.from_pretrained(args.lora_model_path)
+        tokenizer = AutoTokenizer.from_pretrained(args.lora_model_path, padding_side='left')
     else:
         logging.info(f"Loading original {args.model} model")
         model_adapter, tokenizer = get_model_and_tokenizer(args.model)

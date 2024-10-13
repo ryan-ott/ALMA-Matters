@@ -48,6 +48,13 @@ cd compression/pruning/TransformerCompression
 conda run -n DL4_env pip install -e .[experiment,finetune]
 ```
 
+#### 2.2. QLoRA Installation
+The `qlora` submodule is independently usable (of the SliceGPT env), so to run (one of the) qlora training configurations, use the provided job file `run_qlora.job`; like this:
+
+```bash
+sbatch run_qlora.job
+```
+
 ### 3. Updating the Submodule (When Necessary)
 If a submodule is updated in the remote repository and you need to pull the latest changes, run:
 
