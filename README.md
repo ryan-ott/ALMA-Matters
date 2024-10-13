@@ -64,4 +64,4 @@ git submodule update --remote
 This will pull the latest version of the submodule from its repository.
 
 ### 4. Running the Code
-Once the environment is set up and submodules are initialized, you can start running the experiments and scripts in the repository. For example, to evaluate a translation model, refer to the `evaluation/translation_eval2.py` script (filename will hopefully change ;).
+Once the environment is set up and submodules are initialized, you can start running the experiments and scripts in the repository. For example, to evaluate a translation model, refer to the `evaluation/translation_eval.sh` script.
