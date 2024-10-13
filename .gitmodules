@@ -1,3 +1,6 @@
 [submodule "SliceGPT"]
 	path = compression/pruning/TransformerCompression
 	url = https://github.com/ryan-ott/TransformerCompression.git
+[submodule "compression/quant_lora/qlora"]
+	path = compression/quant_lora/qlora
+	url = https://github.com/artidoro/qlora
