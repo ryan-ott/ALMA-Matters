@@ -5,7 +5,7 @@
 #SBATCH --job-name=testing_q
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=18
-#SBATCH --time=00:09:50
+#SBATCH --time=20:09:50
 #SBATCH --output=testing_lora.out
 
 
@@ -26,6 +26,6 @@ export PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python
 # Verify GPU availability
 python -uc "import torch; print('GPU available?', torch.cuda.is_available())"
 
-cd $HOME/ALMA-Matters/compression/quant_lora/qlora
+cd $HOME/ALMA-Matters/compression/quant/qlora
 
 python qlora.py --model_name_or_path "haoranxu/ALMA-7B" --dataset 'data/alpaca_format_dataset.json' --quant_type 'nf4' --train_on_source False --output_dir './output'
