@@ -7,3 +7,6 @@
 [submodule "compression/quant_lora/qlora"]
 	path = compression/quant_lora/qlora
 	url = https://github.com/artidoro/qlora
+[submodule "compression/quant/qlora"]
+	path = compression/quant/qlora
+	url = https://github.com/simonvhuesgen/qlora
