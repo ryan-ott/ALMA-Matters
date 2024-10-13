@@ -1,0 +1,13 @@
+{
+    "total_tokens_processed": 1873280,
+    "total_time_taken_sec": 16390.243899322115,
+    "throughput_tokens_per_sec": 114.29238097411577,
+    "average_time_per_token_ms": 8.749489611442025,
+    "total_compute_time_sec": 16390.243899322115,
+    "num_gpus": 1,
+    "average_peak_memory_GB": 21.727495193481445,
+    "batch_size": 8,
+    "beam_size": 5,
+    "model": "haoranxu/ALMA-7B",
+    "dtype": "float16"
+}
