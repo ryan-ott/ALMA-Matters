@@ -1,0 +1,31 @@
+#!/bin/bash
+
+#SBATCH --partition=gpu
+#SBATCH --gpus=1
+#SBATCH --job-name=testing_q
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=18
+#SBATCH --time=20:09:50
+#SBATCH --output=testing_lora.out
+
+
+module purge
+module load 2023
+module load Python/3.11.3-GCCcore-12.3.0  # Load the Python 3.11.3 module  
+
+pip install --user tqdm transformers datasets sentencepiece accelerate peft halo ml_collections bitsandbytes
+
+pip install peft==0.6.2 ijson huggingface-hub unbabel-cometsacrebleu
+
+pip install pytorch=1.13.0
+pip install cudatoolkit=11.7
+
+#pip install protobuf==3.20.3
+export PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python
+     
+# Verify GPU availability
+python -uc "import torch; print('GPU available?', torch.cuda.is_available())"
+
+cd $HOME/ALMA-Matters/compression/quant/qlora
+
+python qlora.py --model_name_or_path "haoranxu/ALMA-7B" --dataset 'data/alpaca_format_dataset.json' --quant_type 'nf4' --train_on_source False --output_dir './output'

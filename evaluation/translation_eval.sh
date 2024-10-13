@@ -15,20 +15,13 @@ for pair in ${TEST_PAIRS//,/ }; do
         TOK="ja-mecab"
     fi
     echo "--------------------Results for ${pair}-------------------------------------"
-    # if [${SLICE} == "Baseline"]; then
-    #     src_path=results/Baseline/result_${src}-${tgt}.txt
-    #     output_path=results/Baseline/result_${src}-${tgt}.txt
-    # else
-    #     src_path=results/${SLICE}-slice/result_${src}-${tgt}.txt
-    #     output_path=results/${SLICE}-slice/result_${src}-${tgt}.txt
-    # fi
+    
     src_path=results/${SLICE}-slice/result_${src}-${tgt}.txt
     # tgt_path=./datasets/human-translations/ALMA_test_${src}${tgt}.json
     if [[ -f "../datasets/human-translations/ALMA_test_${src}-${tgt}.txt" ]]; then
         echo "Target text file already exists. Using existing file."
     else
         touch "../datasets/human-translations/ALMA_test_${src}-${tgt}.txt"
-        # jq -r --arg key "$tgt" '.[].translation[$tgt]' "../datasets/human-translations/ALMA_test_${src}-${tgt}.json" > "../datasets/human-translations/ALMA_test_${src}-${tgt}.txt"
         python - <<END
 import json
 # Load the JSON file
@@ -46,15 +39,8 @@ END
         echo "Values have been written to ../datasets/human-translations/ALMA_test_${src}-${tgt}.txt"
     fi
     tgt_path=../datasets/human-translations/ALMA_test_${src}-${tgt}.txt
-    # tgt_path=results/baseline/result_${src}-${tgt}.txt
-
-
-    # cp ${src_path} ${OUTPUT_DIR}
-
-
-    # output_path=${OUTPUT_DIR}/result_${src}-${tgt}.txt
+    
     output_path=results/${SLICE}-slice/result_${src}-${tgt}.txt
-    # cp ${src_path} ${output_path}
 
     # Baseline results
     # src_path=results/Baseline/result_${src}-${tgt}.txt
