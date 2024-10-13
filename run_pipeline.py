@@ -147,8 +147,9 @@ def main(args):
                 # no_repeat_ngram_size=3,
                 # eos_token_id=tokenizer.eos_token_id)
     outputs = tokenizer.batch_decode(generated_ids, skip_special_tokens=True)
-    print("++++++++++++++")
+    print("\n++++++++++++++")
     print(outputs)
+    print("\n++++++++++++++")
 
 
 if __name__ == "__main__":
