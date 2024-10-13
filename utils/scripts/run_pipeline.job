@@ -6,14 +6,75 @@
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=18
 #SBATCH --time=04:00:00
-#SBATCH --output=/home/scur1769/ALMA-Matters/utils/script_outputs/RunPipeline_%A.out
+#SBATCH --output=/home/scur1769/ALMA-Matters/utils/outputs/RunPipeline_%A.out
 
 module purge
 module load 2022
 module load Anaconda3/2022.05
 
-cd $HOME/ALMA-Matters
-
 source activate DL4_env
 
-python run_pipeline.py
+python -uc "import torch; print('GPU available?', torch.cuda.is_available())"
+python --version
+
+cd $HOME/ALMA-Matters
+
+sparsity=0.1
+ende_prompt='Translate this from English to German:\nEnglish: Lets see whether this translation succeeds.\German:'
+deen_prompt='Translate this from German to English:\nGerman: Lasst uns sehen, ob diese Übersetzung gelingt.\nEnglish:'
+
+# BASE MODEL
+echo ""
+echo "+ + + + + + + + + + + + + + + + + + + + + + + +"
+echo "Base ALMA-7B model English to German"
+python run_pipeline.py \
+        --model "haoranxu/ALMA-7B" \
+        --prompt "$ende_prompt"
+
+# SLICED MODEL
+echo ""
+echo "+ + + + + + + + + + + + + + + + + + + + + + + +"
+echo "Sliced ALMA-7B model $sparsity English to German"
+python run_pipeline.py \
+        --model "haoranxu/ALMA-7B" \
+        --sliced-model-path "models" \
+        --sparsity $sparsity \
+        --prompt "$ende_prompt"
+
+# RFT SLICED MODEL
+echo ""
+echo "+ + + + + + + + + + + + + + + + + + + + + + + +"
+echo "RFT Sliced ALMA-7B model $sparsity English to German"
+python run_pipeline.py \
+        --model "haoranxu/ALMA-7B" \
+        --sliced-model-path "models/ft" \
+        --sparsity $sparsity \
+        --prompt "$ende_prompt"
+
+# BASE MODEL
+echo ""
+echo "+ + + + + + + + + + + + + + + + + + + + + + + +"
+echo "Base ALMA-7B model German to English"
+python run_pipeline.py \
+        --model "haoranxu/ALMA-7B" \
+        --prompt "$deen_prompt"
+
+# SLICED MODEL
+echo ""
+echo "+ + + + + + + + + + + + + + + + + + + + + + + +"
+echo "Sliced ALMA-7B model $sparsity German to English"
+python run_pipeline.py \
+        --model "haoranxu/ALMA-7B" \
+        --sliced-model-path "models" \
+        --sparsity $sparsity \
+        --prompt "$deen_prompt"
+
+# RFT SLICED MODEL
+echo ""
+echo "+ + + + + + + + + + + + + + + + + + + + + + + +"
+echo "RFT Sliced ALMA-7B model $sparsity German to English"
+python run_pipeline.py \
+        --model "haoranxu/ALMA-7B" \
+        --sliced-model-path "models/ft" \
+        --sparsity $sparsity \
+        --prompt "$deen_prompt"

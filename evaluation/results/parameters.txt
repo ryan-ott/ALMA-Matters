@@ -1,0 +1,8 @@
+{
+    "dtype": "float16",
+    "batch-size": 8,  // (4 for zh-en) 
+    "beam"5,
+    "model": "haoranxu/ALMA-7B",
+    "sliced-model-path": "/home/scur1769/ALMA-Matters/models",
+    "sparsity": 0.20  // (0.25, 0.30)
+}

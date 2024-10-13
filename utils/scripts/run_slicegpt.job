@@ -6,7 +6,7 @@
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=18
 #SBATCH --time=01:00:00
-#SBATCH --output=/home/scur1769/ALMA-Matters/utils/script_outputs/RunSliceGPT_%A.out
+#SBATCH --output=/home/scur1769/ALMA-Matters/utils/outputs/RunSliceGPT_%A.out
 
 module purge
 module load 2022
@@ -16,14 +16,22 @@ source activate DL4_env
 
 python -uc "import torch; print('GPU available?', torch.cuda.is_available())"
 
-cd $HOME/ALMA-Matters/
+cd $HOME/ALMA-Matters
 
 python compression/pruning/TransformerCompression/experiments/run_slicegpt.py \
-        # --model "haoranxu/ALMA-7B" \
-        --model "meta-llama/Llama-2-7B-hf" \
+        --model "haoranxu/ALMA-7B" \
         --save-dir $HOME/ALMA-Matters/models/ \
-        --sparsity 0.25 \
-        --device "cuda:0" \
+        --sparsity 0.01 \
+        --device "cuda" \
+        --no-wandb \
         --eval-baseline \
-        --no-wandb
+        # --model "meta-llama/Llama-2-7B-hf" \
 
+echo "++++++++++++++++++++++++++++++++++++++"
+echo "+++++ TESTING NEWLY SLICED MODEL +++++"
+echo "++++++++++++++++++++++++++++++++++++++"
+python run_pipeline.py \
+        --model "haoranxu/ALMA-7B" \
+        --sliced-model-path "models" \
+        --sparsity 0.01 \
+        --prompt "Translate this from English to German:\nEnglish: Oh boy I sure hope this works!\nGerman:"

@@ -1,0 +1,46 @@
+#!/bin/bash
+
+#SBATCH --partition=gpu
+#SBATCH --gpus=1
+#SBATCH --job-name=RunTranslationInference
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=18
+#SBATCH --time=06:00:00
+#SBATCH --output=/home/scur1769/ALMA-Matters/utils/outputs/RunTranslationInference_%A.out
+
+module purge
+module load 2022
+module load Anaconda3/2022.05
+
+source activate DL4_env
+
+python -uc "import torch; print('GPU available?', torch.cuda.is_available())"
+
+cd $HOME/ALMA-Matters/
+
+sparsity=0.10
+
+# # NOTE: TO RUN A SINGLE TRANSLATION PAIR, USE THIS - Reduce batch size to 4 for ZH-EN on A100, idk why ¯\_(ツ)_/¯
+# python evaluation/translation_inference.py \
+#         --model "haoranxu/ALMA-7B" \
+#         --sliced-model-path $HOME/ALMA-Matters/models \
+#         --sparsity $sparsity \
+#         --save-dir "$HOME/ALMA-Matters/evaluation/results/${sparsity}-slice" \
+#         --json-file $HOME/ALMA-Matters/datasets/human-translations/ALMA_test_zh-en.json \
+#         --dtype float16 \
+#         --batch-size 4 \
+#         --beam 5
+
+# NOTE: TO RUN ALL TRANSLATIONS IN ONE GO, USE THIS
+for json_file in $HOME/ALMA-Matters/datasets/human-translations/*.json; do
+  echo "Processing file: $json_file"
+  python evaluation/translation_inference.py \
+    --model "haoranxu/ALMA-7B" \
+    --sliced-model-path $HOME/ALMA-Matters/models \
+    --sparsity $sparsity \
+    --save-dir "$HOME/ALMA-Matters/evaluation/results/10-slice" \
+    --json-file $json_file \
+    --dtype float16 \
+    --batch-size 8 \
+    --beam 5
+done

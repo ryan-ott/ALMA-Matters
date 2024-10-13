@@ -6,19 +6,21 @@
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=18
 #SBATCH --time=04:00:00
-#SBATCH --output=/home/scur1772/ALMA-Matters/utils/script_outputs/InstallEnvironment_%A.out
+#SBATCH --output=/home/scur1769/ALMA-Matters/utils/outputs/InstallEnvironment_%A.out
 
 module purge
 module load 2022
 module load Anaconda3/2022.05
 
-cd $HOME
-pwd
-conda config --add channels pytorch
-conda env create -f "/home/scur1772/ALMA-Matters/DL4_env.yml"
+cd $HOME/ALMA-Matters/
+conda env create -f DL4_env.yml
 
 # Activate the conda environment
 source activate DL4_env
+
+cd compression/pruning/TransformerCompression
+
+conda run -n DL4_env pip install -e .[experiment,finetune]
 
 # Print packages in the environment
 conda list

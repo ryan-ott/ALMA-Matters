@@ -1,0 +1,62 @@
+============================================================================================== 
+Warning! Mixing Conda and module environments may lead to corruption of the
+user environment. 
+We do not recommend users mixing those two environments unless absolutely
+necessary. Note that 
+SURF does not provide any support for Conda environment.
+For more information, please refer to our software policy page:
+https://servicedesk.surf.nl/wiki/display/WIKI/Software+policy+Snellius#SoftwarepolicySnellius-UseofAnacondaandMinicondaenvironmentsonSnellius 
+
+Remember that many packages have already been installed on the system and can
+be loaded using 
+the 'module load <package__name>' command. If you are uncertain if a package is
+already available 
+on the system, please use 'module avail' or 'module spider' to search for it.
+============================================================================================== 
+GPU available? True
++++Directory: /home/scur1769/ALMA-Matters/compression/pruning/TransformerCompression/experiments
+Running SliceGPT experiment.
+PyTorch device: cuda:0
+Number of available cuda devices: 1
+wandb: WARNING Disabling the wandb service is deprecated as of version 0.18.0 and will be removed in future versions. 
+Loading meta-llama/Llama-2-7b-hf config and model weights from Hugging Face
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:04<00:04,  4.35s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:05<00:00,  2.61s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:05<00:00,  2.88s/it]
+Loading model done
+Loading dataset: wikitext2
+Loading dataset done
+Preparing dataloader
+Preparing dataloader done
+Preparing test dataloader
+Preparing test dataloader done
+Evaluating perplexity...
+Time spent on evaluation: 00:00:32.4973
+Original ppl: 5.4717
+Replacing layers
+Replacing layers done
+Fusing layernorm modules
+Fusing layernorm modules done
+Original model parameters: 6,738,149,376
+New embedding dimension: 3072 (sparsity 25.0000 %)
+Rotate and slice layers
+Rotating and slicing:   0%|          | 0/32 [00:00<?, ?layer/s]Rotating and slicing:   3%|▎         | 1/32 [00:10<05:36, 10.86s/layer]Rotating and slicing:   6%|▋         | 2/32 [00:21<05:25, 10.86s/layer]Rotating and slicing:   9%|▉         | 3/32 [00:32<05:14, 10.85s/layer]Rotating and slicing:  12%|█▎        | 4/32 [00:43<05:03, 10.84s/layer]Rotating and slicing:  16%|█▌        | 5/32 [00:54<04:52, 10.83s/layer]Rotating and slicing:  19%|█▉        | 6/32 [01:05<04:41, 10.84s/layer]Rotating and slicing:  22%|██▏       | 7/32 [01:15<04:30, 10.83s/layer]Rotating and slicing:  25%|██▌       | 8/32 [01:26<04:19, 10.83s/layer]Rotating and slicing:  28%|██▊       | 9/32 [01:37<04:09, 10.84s/layer]Rotating and slicing:  31%|███▏      | 10/32 [01:48<03:58, 10.83s/layer]Rotating and slicing:  34%|███▍      | 11/32 [01:59<03:47, 10.83s/layer]Rotating and slicing:  38%|███▊      | 12/32 [02:10<03:36, 10.83s/layer]Rotating and slicing:  41%|████      | 13/32 [02:20<03:25, 10.83s/layer]Rotating and slicing:  44%|████▍     | 14/32 [02:31<03:14, 10.83s/layer]Rotating and slicing:  47%|████▋     | 15/32 [02:42<03:04, 10.83s/layer]Rotating and slicing:  50%|█████     | 16/32 [02:53<02:53, 10.84s/layer]Rotating and slicing:  53%|█████▎    | 17/32 [03:04<02:42, 10.85s/layer]Rotating and slicing:  56%|█████▋    | 18/32 [03:15<02:31, 10.85s/layer]Rotating and slicing:  59%|█████▉    | 19/32 [03:25<02:20, 10.84s/layer]Rotating and slicing:  62%|██████▎   | 20/32 [03:36<02:10, 10.84s/layer]Rotating and slicing:  66%|██████▌   | 21/32 [03:47<01:59, 10.85s/layer]Rotating and slicing:  69%|██████▉   | 22/32 [03:58<01:48, 10.85s/layer]Rotating and slicing:  72%|███████▏  | 23/32 [04:09<01:37, 10.85s/layer]Rotating and slicing:  75%|███████▌  | 24/32 [04:20<01:26, 10.84s/layer]Rotating and slicing:  78%|███████▊  | 25/32 [04:30<01:15, 10.83s/layer]Rotating and slicing:  81%|████████▏ | 26/32 [04:41<01:05, 10.86s/layer]Rotating and slicing:  84%|████████▍ | 27/32 [04:52<00:54, 10.84s/layer]Rotating and slicing:  88%|████████▊ | 28/32 [05:03<00:43, 10.84s/layer]Rotating and slicing:  91%|█████████ | 29/32 [05:14<00:32, 10.83s/layer]Rotating and slicing:  94%|█████████▍| 30/32 [05:25<00:21, 10.85s/layer]Rotating and slicing:  97%|█████████▋| 31/32 [05:36<00:10, 10.84s/layer]Rotating and slicing: 100%|██████████| 32/32 [05:47<00:00, 11.06s/layer]Rotating and slicing: 100%|██████████| 32/32 [05:47<00:00, 10.86s/layer]
+Rotate and slice layers done
+Saved sliced model to /home/scur1769/ALMA-Matters/models/
+Evaluating perplexity...
+Time spent on evaluation: 00:00:27.5110
+After rotating and slicing 7.5594
+Sliced model parameters: 5,704,777,728 (sliced fraction 0.1534)
+
+JOB STATISTICS
+==============
+Job ID: 7893266
+Cluster: snellius
+User/Group: scur1769/scur1769
+State: RUNNING
+Nodes: 1
+Cores per node: 18
+CPU Utilized: 00:00:00
+CPU Efficiency: 0.00% of 02:35:42 core-walltime
+Job Wall-clock time: 00:08:39
+Memory Utilized: 0.00 MB (estimated maximum)
+Memory Efficiency: 0.00% of 120.00 GB (120.00 GB/node)
+WARNING: Efficiency statistics may be misleading for RUNNING jobs.
