@@ -57,8 +57,8 @@ END
     # cp ${src_path} ${output_path}
 
     # Baseline results
-    src_path=results/Baseline/result_${src}-${tgt}.txt
-    output_path=results/Baseline/result_${src}-${tgt}.txt
+    # src_path=results/Baseline/result_${src}-${tgt}.txt
+    # output_path=results/Baseline/result_${src}-${tgt}.txt
 
     # # qlora base results
     # src_path=results/qlora_base/result_${src}-${tgt}.txt

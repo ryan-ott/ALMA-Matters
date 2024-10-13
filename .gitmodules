@@ -4,3 +4,6 @@
 [submodule "ALMA"]
 	path = compression/finetuning/ALMA
 	url = https://github.com/ryan-ott/ALMA.git
+[submodule "compression/quant_lora/qlora"]
+	path = compression/quant_lora/qlora
+	url = https://github.com/artidoro/qlora
