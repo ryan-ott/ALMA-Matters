@@ -131,10 +131,10 @@ def main(args):
                 max_new_tokens=args.gen_max_tokens,
                 do_sample=True,
                 temperature=0.6,
-                top_p=0.9,)
-                # repetition_penalty=1.2,  # THESE THREE HERE
-                # no_repeat_ngram_size=3,  # MIGHT HELP
-                # eos_token_id=tokenizer.eos_token_id)  # TO AVOID REPEATING
+                top_p=0.9,
+                repetition_penalty=4.0,  # THESE THREE HERE
+                no_repeat_ngram_size=3,  # MIGHT HELP
+                eos_token_id=tokenizer.eos_token_id)  # TO AVOID REPEATING
         else:
             generated_ids = model.generate(
                 input_ids=input_ids,
@@ -142,7 +142,7 @@ def main(args):
                 max_length=args.gen_max_tokens,
                 do_sample=True,
                 temperature=0.6,
-                top_p=0.9,)
+                top_p=0.9)
                 # repetition_penalty=1.2,
                 # no_repeat_ngram_size=3,
                 # eos_token_id=tokenizer.eos_token_id)
