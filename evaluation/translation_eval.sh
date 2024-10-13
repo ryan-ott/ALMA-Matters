@@ -57,16 +57,16 @@ END
     # cp ${src_path} ${output_path}
 
     # Baseline results
-    src_path=results/Baseline/result_${src}-${tgt}.txt
-    output_path=results/Baseline/result_${src}-${tgt}.txt
+    # src_path=results/Baseline/result_${src}-${tgt}.txt
+    # output_path=results/Baseline/result_${src}-${tgt}.txt
 
     # # qlora base results
     # src_path=results/qlora_base/result_${src}-${tgt}.txt
     # output_path=results/qlora_base/result_${src}-${tgt}.txt
  
     # qlora base16 results
-    # src_path=results/qlora_base_16/result_${src}-${tgt}.txt
-    # output_path=results/qlora_base_16/result_${src}-${tgt}.txt
+    src_path=results/qlora_base_16/result_${src}-${tgt}.txt
+    output_path=results/qlora_base_16/result_${src}-${tgt}.txt
 
     echo "Source Path: $src_path"
     echo "Output Path: $output_path"
