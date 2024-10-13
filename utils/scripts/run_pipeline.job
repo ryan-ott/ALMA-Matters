@@ -19,17 +19,21 @@ python --version
 
 cd $HOME/ALMA-Matters
 
-sparsity=0.2
+sparsity=0.1
 ende_prompt='Translate this from English to German:\nEnglish: Lets see whether this translation succeeds.\German:'
 deen_prompt='Translate this from German to English:\nGerman: Lasst uns sehen, ob diese Übersetzung gelingt.\nEnglish:'
 
 # BASE MODEL
-echo "Base ALMA-7B model Englih to German"
+echo ""
+echo "+ + + + + + + + + + + + + + + + + + + + + + + +"
+echo "Base ALMA-7B model English to German"
 python run_pipeline.py \
         --model "haoranxu/ALMA-7B" \
         --prompt "$ende_prompt"
 
 # SLICED MODEL
+echo ""
+echo "+ + + + + + + + + + + + + + + + + + + + + + + +"
 echo "Sliced ALMA-7B model $sparsity English to German"
 python run_pipeline.py \
         --model "haoranxu/ALMA-7B" \
@@ -37,16 +41,40 @@ python run_pipeline.py \
         --sparsity $sparsity \
         --prompt "$ende_prompt"
 
+# RFT SLICED MODEL
+echo ""
+echo "+ + + + + + + + + + + + + + + + + + + + + + + +"
+echo "RFT Sliced ALMA-7B model $sparsity English to German"
+python run_pipeline.py \
+        --model "haoranxu/ALMA-7B" \
+        --sliced-model-path "models/ft" \
+        --sparsity $sparsity \
+        --prompt "$ende_prompt"
+
 # BASE MODEL
+echo ""
+echo "+ + + + + + + + + + + + + + + + + + + + + + + +"
 echo "Base ALMA-7B model German to English"
 python run_pipeline.py \
         --model "haoranxu/ALMA-7B" \
         --prompt "$deen_prompt"
 
 # SLICED MODEL
+echo ""
+echo "+ + + + + + + + + + + + + + + + + + + + + + + +"
 echo "Sliced ALMA-7B model $sparsity German to English"
 python run_pipeline.py \
         --model "haoranxu/ALMA-7B" \
         --sliced-model-path "models" \
+        --sparsity $sparsity \
+        --prompt "$deen_prompt"
+
+# RFT SLICED MODEL
+echo ""
+echo "+ + + + + + + + + + + + + + + + + + + + + + + +"
+echo "RFT Sliced ALMA-7B model $sparsity German to English"
+python run_pipeline.py \
+        --model "haoranxu/ALMA-7B" \
+        --sliced-model-path "models/ft" \
         --sparsity $sparsity \
         --prompt "$deen_prompt"

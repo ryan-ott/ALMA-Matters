@@ -26,13 +26,17 @@ python compression/pruning/TransformerCompression/experiments/run_finetuning.py 
         --sliced-model-path "models" \
         --sparsity $sparsity \
         --save-dir $HOME/ALMA-Matters/models/ft \
+        --st_checkpoint_dir $HOME/ALMA-Matters/models/ft \
         --no-wandb \
+        --early-stopping-patience 1000000 \
         --device "cuda" \
-        --finetune-train-nsamples 4096 \
+        --ppl-eval-dataset "alpaca" \
+        --finetune-dataset "alpaca" \
+        --finetune-train-nsamples 8000 \
+        --finetune-train-batch-size 2 \
+        --finetune-train-seqlen 1024 \
         --finetune-test-nsamples 128 \
-        --finetune-train-batch-size 1 \
-        --finetune-test-batch-size 1 \
-        --finetune-train-seqlen 2048 \
-        --finetune-test-seqlen 2048
+        --finetune-test-batch-size 2 \
+        --finetune-test-seqlen 1024
 
 echo "Finished finetuning SliceGPT with sparsity $sparsity"
